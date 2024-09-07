@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    
+    <title>Weather</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="card">
+    <div class="search">
+        <input type="text" placeholder="Enter city name" spellcheck="false" class="search-input">
+    </div>
+    <div class="weather">
+        <img src="rain.png" class="weather-icon">
+        <h1 class="temp">20°C</h1>
+        <h2 class="city">New York</h2>
+        <div class="details">
+            <div class="col">
+                <img src="humidity.png">
+                <div>
+                    <p class="humidity">50%</p>
+                    <p>Humidity</p>
+                </div>
+            </div>
+            <div class="col">
+                <img src="wind.png">
+                <div>
+                    <p class="wind">50km/h</p>
+                    <p>Wind Speed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const apikey = "1ee985c0811c02d129583184a3f9cd3a";
+const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+const searchInput = document.querySelector(".search-input");
+
+async function checkWeather(city) {
+    const response = await fetch(apiurl + city + `&appid=${apikey}`);
+    if (response.ok) {
+        var data = await response.json();
+        console.log(data);
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".temp").innerHTML = data.main.temp + "°C";
+        document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + "km/hr";
+    } else {
+        console.error("City not found or error in API call");
+        alert("City not found. Please enter a valid city name.");
+    }
+}
+
+// Add an event listener to the input to listen for "Enter" key press
+searchInput.addEventListener("keyup", (event) => {
+    if (event.key === "Enter") {
+        checkWeather(searchInput.value);
+    }
+});
+</script>
+
+</body>
+</html>
